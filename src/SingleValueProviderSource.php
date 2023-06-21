@@ -2,38 +2,26 @@
 
 namespace Cspray\AnnotatedContainer\Secrets;
 
-use Adbar\Dot;
 use Cspray\Typiphy\Type;
 use Cspray\Typiphy\TypeIntersect;
 use Cspray\Typiphy\TypeUnion;
-use function dot;
 
-final class ArraySource implements Source {
-
-    private readonly Dot $data;
+final class SingleValueProviderSource implements Source {
 
     /**
      * @param non-empty-string $name
-     * @param array<non-empty-string, mixed> $data
+     * @param ValueProvider $valueProvider
      */
     public function __construct(
         private readonly string $name,
-        array $data
-    ) {
-        $this->data = dot($data);
-    }
+        private readonly ValueProvider $valueProvider
+    ) {}
 
-    /**
-     * @return non-empty-string
-     */
     public function getName() : string {
         return $this->name;
     }
 
-    /**
-     * @param non-empty-string $key
-     */
     public function getValue(TypeUnion|Type|TypeIntersect $type, string $key) : mixed {
-        return $this->data->get($key);
+        return $this->valueProvider->getValue($type, $key);
     }
 }
