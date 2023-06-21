@@ -25,7 +25,11 @@ final class SecretsParameterStoreFactory implements ParameterStoreFactory {
             throw InvalidParameterStoreIdentifier::fromIdentifierNotSecretsParameterStore($identifier);
         }
         $store = new SecretsParameterStore();
+        foreach ($this->sources as $source) {
+            $store->addSource($source);
+        }
 
         return $store;
     }
+
 }
