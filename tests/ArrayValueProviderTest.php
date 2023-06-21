@@ -2,34 +2,28 @@
 
 namespace Cspray\AnnotatedContainer\Secrets\Test;
 
-use Cspray\AnnotatedContainer\Secrets\ArraySource;
+use Cspray\AnnotatedContainer\Secrets\ArrayValueProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use function Cspray\Typiphy\stringType;
 
-#[CoversClass(ArraySource::class)]
-final class ArraySourceTest extends TestCase {
-
-    public function testNamePassedToArraySourceReturnedFromGetName() : void {
-        $subject = new ArraySource('source-name', []);
-
-        self::assertSame('source-name', $subject->getName());
-    }
+#[CoversClass(ArrayValueProvider::class)]
+final class ArrayValueProviderTest extends TestCase {
 
     public function testEmptyArrayReturnsNull() : void {
-        $subject = new ArraySource('source', []);
+        $subject = new ArrayValueProvider([]);
 
         self::assertNull($subject->getValue(stringType(), 'some-key'));
     }
 
     public function testSingleDimensionArrayWithKeyHasCorrectValue() : void {
-        $subject = new ArraySource('source', ['foo' => 'bar']);
+        $subject = new ArrayValueProvider(['foo' => 'bar']);
 
         self::assertSame('bar', $subject->getValue(stringType(), 'foo'));
     }
 
     public function testMultiDimensionalArrayWithKeyHasCorrectValue() : void {
-        $subject = new ArraySource('source', [
+        $subject = new ArrayValueProvider([
             'foo' => [
                 'bar' => [
                     'baz' => 'qux'

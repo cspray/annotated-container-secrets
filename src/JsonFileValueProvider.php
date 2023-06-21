@@ -10,17 +10,15 @@ use Cspray\Typiphy\TypeUnion;
 use JsonException;
 use function dot;
 
-final class JsonFileSource implements Source {
+final class JsonFileValueProvider implements ValueProvider {
 
     private readonly Dot $data;
 
     /**
-     * @param non-empty-string $name
      * @param non-empty-string $filePath
      * @throws InvalidJsonSourceFile
      */
     public function __construct(
-        private readonly string $name,
         string $filePath
     ) {
         if (!is_file($filePath)) {
@@ -48,10 +46,6 @@ final class JsonFileSource implements Source {
         } catch (JsonException $exception) {
             throw InvalidJsonSourceFile::fromFileNotValidJson($filePath, $exception);
         }
-    }
-
-    public function getName() : string {
-        return $this->name;
     }
 
     public function getValue(TypeUnion|Type|TypeIntersect $type, string $key) : mixed {
