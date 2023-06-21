@@ -2,7 +2,6 @@
 
 namespace Cspray\AnnotatedContainer\Secrets\Test;
 
-use Cspray\AnnotatedContainer\Profiles\ActiveProfiles;
 use Cspray\AnnotatedContainer\Secrets\ProfileAwareSource;
 use Cspray\AnnotatedContainer\Secrets\ValueProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -13,27 +12,10 @@ use function Cspray\Typiphy\stringType;
 #[CoversClass(ProfileAwareSource::class)]
 final class ProfileAwareSourceTest extends TestCase {
 
-    private function activeProfiles(array $profiles) : ActiveProfiles {
-        return new class($profiles) implements ActiveProfiles {
-
-            public function __construct(
-                private readonly array $profiles
-            ) {}
-
-            public function getProfiles() : array {
-                return $this->profiles;
-            }
-
-            public function isActive(string $profile) : bool {
-                return in_array($profile, $this->profiles, true);
-            }
-        };
-    }
-
     public function testNamePassedToConstructorReturnedFromGetName() : void {
         $subject = new ProfileAwareSource(
             'profile-aware',
-            $this->activeProfiles(['default']),
+            ['default'],
             [
                 'dev' => $this->getMockBuilder(ValueProvider::class)->getMock()
             ]
@@ -45,7 +27,7 @@ final class ProfileAwareSourceTest extends TestCase {
     public function testProfileMapDoesNotHaveActiveProfileReturnsNull() : void {
         $subject = new ProfileAwareSource(
             'omg-thats-right',
-            $this->activeProfiles(['dev']),
+            ['dev'],
             [
                 'prod' => $valueProvider = $this->getMockBuilder(ValueProvider::class)->getMock()
             ]
@@ -59,7 +41,7 @@ final class ProfileAwareSourceTest extends TestCase {
     public function testValueProviderMapWithActiveProfileHasValueReturned() : void {
         $subject = new ProfileAwareSource(
             'archer',
-            $this->activeProfiles(['dev']),
+            ['dev'],
             [
                 'prod' => $prodValueProvider = $this->getMockBuilder(ValueProvider::class)->getMock(),
                 'dev' => $devValueProvider = $this->getMockBuilder(ValueProvider::class)->getMock(),
