@@ -8,7 +8,7 @@ use Cspray\Typiphy\Type;
 use Cspray\Typiphy\TypeIntersect;
 use Cspray\Typiphy\TypeUnion;
 
-final class SecretsParameterStore implements ParameterStore {
+final class ConfigParameterStore implements ParameterStore {
 
     /**
      * @var array<non-empty-string, Source>
@@ -20,7 +20,7 @@ final class SecretsParameterStore implements ParameterStore {
      * @param non-empty-string $storeNameDelimiter
      */
     public function __construct(
-        private readonly string $name = 'secrets',
+        private readonly string $name,
         private readonly string $storeNameDelimiter = '.'
     ) {}
 

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="5.12.0@f90118cdeacd0088e7215e64c0c99ceca819e176">
+  <file src="src/ConfigParameterStoreFactory.php">
+    <ArgumentTypeCoercion>
+      <code>$identifier</code>
+      <code>$identifier</code>
+    </ArgumentTypeCoercion>
+  </file>
   <file src="src/PhpIncludeValueProvider.php">
     <MixedArgumentTypeCoercion>
       <code>$data</code>
