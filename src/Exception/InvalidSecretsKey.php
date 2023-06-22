@@ -3,7 +3,7 @@
 namespace Cspray\AnnotatedContainer\Secrets\Exception;
 
 use Cspray\AnnotatedContainer\Exception\Exception;
-use Cspray\AnnotatedContainer\Secrets\SecretsParameterStore;
+use Cspray\AnnotatedContainer\Secrets\ConfigParameterStore;
 
 final class InvalidSecretsKey extends Exception {
 
@@ -11,7 +11,7 @@ final class InvalidSecretsKey extends Exception {
         return new self(sprintf(
             'The key "%s" passed to %s MUST contain at least one "%s" delimiter.',
             $key,
-            SecretsParameterStore::class,
+            ConfigParameterStore::class,
             $storeDelimiter
         ));
     }
@@ -21,7 +21,7 @@ final class InvalidSecretsKey extends Exception {
             'The key "%s" specifies a secrets source "%s" that has not been added to %s',
             $key,
             $source,
-            SecretsParameterStore::class
+            ConfigParameterStore::class
         ));
     }
 

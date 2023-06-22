@@ -6,8 +6,11 @@ use Cspray\AnnotatedContainer\Exception\Exception;
 
 final class NoSourcesProvided extends Exception {
 
-    public static function fromNoSources() : self {
-        return new self('At least 1 secrets source MUST be provided to this ParameterStore factory.');
+    public static function fromNoSources(string $identifier) : self {
+        return new self(sprintf(
+            'No configuration sources were found for the parameter store identifier "%s".',
+            $identifier
+        ));
     }
 
 }

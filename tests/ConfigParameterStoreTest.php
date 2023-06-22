@@ -3,7 +3,7 @@
 namespace Cspray\AnnotatedContainer\Secrets\Test;
 
 use Cspray\AnnotatedContainer\Secrets\Exception\InvalidSecretsKey;
-use Cspray\AnnotatedContainer\Secrets\SecretsParameterStore;
+use Cspray\AnnotatedContainer\Secrets\ConfigParameterStore;
 use Cspray\AnnotatedContainer\Secrets\Source;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -11,13 +11,13 @@ use PHPUnit\Framework\TestCase;
 use function Cspray\Typiphy\stringType;
 
 #[
-    CoversClass(SecretsParameterStore::class),
+    CoversClass(ConfigParameterStore::class),
     CoversClass(InvalidSecretsKey::class)
 ]
-final class SecretsParameterStoreTest extends TestCase {
+final class ConfigParameterStoreTest extends TestCase {
 
     public function testGetNameReturnsValuePassedToConstructor() : void {
-        $subject = new SecretsParameterStore();
+        $subject = new ConfigParameterStore('secrets');
 
         self::assertSame('secrets', $subject->getName());
     }
@@ -32,11 +32,11 @@ final class SecretsParameterStoreTest extends TestCase {
 
     #[DataProvider('storeDelimiterProvider')]
     public function testFetchValueWithoutSourceDelimiterThrowsException(string $storeDelimiter) : void {
-        $subject = new SecretsParameterStore(storeNameDelimiter: $storeDelimiter);
+        $subject = new ConfigParameterStore('secrets', storeNameDelimiter: $storeDelimiter);
 
         self::expectException(InvalidSecretsKey::class);
         self::expectExceptionMessage(
-            'The key "foo" passed to ' . SecretsParameterStore::class . ' MUST contain at least one "' . $storeDelimiter . '" delimiter.'
+            'The key "foo" passed to ' . ConfigParameterStore::class . ' MUST contain at least one "' . $storeDelimiter . '" delimiter.'
         );
 
         $subject->fetch(stringType(), 'foo');
@@ -44,11 +44,11 @@ final class SecretsParameterStoreTest extends TestCase {
 
     #[DataProvider('storeDelimiterProvider')]
     public function testFetchValueWithDelimiterAndNoSourcePresentThrowsException(string $storeDelimiter) : void {
-        $subject = new SecretsParameterStore(storeNameDelimiter: $storeDelimiter);
+        $subject = new ConfigParameterStore('secrets', storeNameDelimiter: $storeDelimiter);
 
         self::expectException(InvalidSecretsKey::class);
         self::expectExceptionMessage(sprintf(
-            'The key "foo%sbar" specifies a secrets source "foo" that has not been added to ' . SecretsParameterStore::class, $storeDelimiter
+            'The key "foo%sbar" specifies a secrets source "foo" that has not been added to ' . ConfigParameterStore::class, $storeDelimiter
         ));
 
         $subject->fetch(stringType(), sprintf('foo%sbar', $storeDelimiter));
@@ -56,7 +56,7 @@ final class SecretsParameterStoreTest extends TestCase {
 
     #[DataProvider('storeDelimiterProvider')]
     public function testFetchValueWithDelimiterAndSourcePresentReturnsValueFromNamedSource(string $storeDelimiter) : void {
-        $subject = new SecretsParameterStore(storeNameDelimiter: $storeDelimiter);
+        $subject = new ConfigParameterStore('secrets', storeNameDelimiter: $storeDelimiter);
 
         $source = $this->getMockBuilder(Source::class)->getMock();
         $source->expects($this->once())
