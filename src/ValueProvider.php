@@ -2,9 +2,9 @@
 
 namespace Cspray\AnnotatedContainer\Secrets;
 
-use Cspray\Typiphy\Type;
-use Cspray\Typiphy\TypeIntersect;
-use Cspray\Typiphy\TypeUnion;
+use Cspray\AnnotatedContainer\Reflection\Type;
+use Cspray\AnnotatedContainer\Reflection\TypeIntersect;
+use Cspray\AnnotatedContainer\Reflection\TypeUnion;
 
 interface ValueProvider {
 

@@ -3,10 +3,10 @@
 namespace Cspray\AnnotatedContainer\Secrets;
 
 use Cspray\AnnotatedContainer\ContainerFactory\ParameterStore;
+use Cspray\AnnotatedContainer\Reflection\Type;
+use Cspray\AnnotatedContainer\Reflection\TypeUnion;
+use Cspray\AnnotatedContainer\Reflection\TypeIntersect;
 use Cspray\AnnotatedContainer\Secrets\Exception\InvalidSecretsKey;
-use Cspray\Typiphy\Type;
-use Cspray\Typiphy\TypeIntersect;
-use Cspray\Typiphy\TypeUnion;
 
 final class ConfigParameterStore implements ParameterStore {
 
@@ -25,17 +25,17 @@ final class ConfigParameterStore implements ParameterStore {
     ) {}
 
     public function addSource(Source $source) : void {
-        $this->sources[$source->getName()] = $source;
+        $this->sources[$source->name()] = $source;
     }
 
     /**
      * @return non-empty-string
      */
-    public function getName() : string {
+    public function name() : string {
         return $this->name;
     }
 
-    public function fetch(TypeUnion|Type|TypeIntersect $type, string $key) : mixed {
+    public function fetch(Type|TypeUnion|TypeIntersect $type, string $key) : mixed {
         $sourceParts = explode($this->storeNameDelimiter, $key, 2);
         if (count($sourceParts) !== 2) {
             throw InvalidSecretsKey::fromKeyInvalidSourceDelimiter($key, $this->storeNameDelimiter);

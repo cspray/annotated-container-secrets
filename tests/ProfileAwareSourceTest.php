@@ -6,8 +6,7 @@ use Cspray\AnnotatedContainer\Secrets\ProfileAwareSource;
 use Cspray\AnnotatedContainer\Secrets\ValueProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use function Cspray\Typiphy\intType;
-use function Cspray\Typiphy\stringType;
+use function Cspray\AnnotatedContainer\Reflection\types;
 
 #[CoversClass(ProfileAwareSource::class)]
 final class ProfileAwareSourceTest extends TestCase {
@@ -21,7 +20,7 @@ final class ProfileAwareSourceTest extends TestCase {
             ]
         );
 
-        self::assertSame('profile-aware', $subject->getName());
+        self::assertSame('profile-aware', $subject->name());
     }
 
     public function testProfileMapDoesNotHaveActiveProfileReturnsNull() : void {
@@ -35,7 +34,7 @@ final class ProfileAwareSourceTest extends TestCase {
 
         $valueProvider->expects($this->never())->method('getValue');
 
-        self::assertNull($subject->getValue(stringType(), 'key'));
+        self::assertNull($subject->getValue(types()->string(), 'key'));
     }
 
     public function testValueProviderMapWithActiveProfileHasValueReturned() : void {
@@ -52,11 +51,11 @@ final class ProfileAwareSourceTest extends TestCase {
         $prodValueProvider->expects($this->never())->method('getValue');
         $devValueProvider->expects($this->once())
             ->method('getValue')
-            ->with(intType(), 'meaningOfLife')
+            ->with(types()->int(), 'meaningOfLife')
             ->willReturn(42);
         $testValueProvider->expects($this->never())->method('getValue');
 
-        self::assertSame(42, $subject->getValue(intType(), 'meaningOfLife'));
+        self::assertSame(42, $subject->getValue(types()->int(), 'meaningOfLife'));
     }
 
 }

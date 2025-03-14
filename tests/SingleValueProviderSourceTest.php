@@ -6,7 +6,7 @@ use Cspray\AnnotatedContainer\Secrets\SingleValueProviderSource;
 use Cspray\AnnotatedContainer\Secrets\ValueProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use function Cspray\Typiphy\stringType;
+use function Cspray\AnnotatedContainer\Reflection\types;
 
 #[CoversClass(SingleValueProviderSource::class)]
 final class SingleValueProviderSourceTest extends TestCase {
@@ -17,7 +17,7 @@ final class SingleValueProviderSourceTest extends TestCase {
             $this->getMockBuilder(ValueProvider::class)->getMock()
         );
 
-        self::assertSame('source-name', $subject->getName());
+        self::assertSame('source-name', $subject->name());
     }
 
     public function testGetValueDelegatedToValueProviderInjectedInConstructor() : void {
@@ -28,10 +28,10 @@ final class SingleValueProviderSourceTest extends TestCase {
 
         $valueProvider->expects($this->once())
             ->method('getValue')
-            ->with(stringType(), 'key')
+            ->with(types()->string(), 'key')
             ->willReturn('something');
 
-        self::assertSame('something', $subject->getValue(stringType(), 'key'));
+        self::assertSame('something', $subject->getValue(types()->string(), 'key'));
     }
 
 }

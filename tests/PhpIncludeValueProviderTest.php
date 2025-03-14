@@ -9,8 +9,7 @@ use Cspray\AnnotatedContainer\Secrets\PhpIncludeValueProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use function Cspray\Typiphy\intType;
-use function Cspray\Typiphy\stringType;
+use function Cspray\AnnotatedContainer\Reflection\types;
 
 #[
     CoversClass(PhpIncludeValueProvider::class),
@@ -32,9 +31,9 @@ final class PhpIncludeValueProviderTest extends TestCase {
     public function testValidTypesReturnedFromIncludedFileReturnsValueForFoundKey(string $file) : void {
         $valueProvider = new PhpIncludeValueProvider($file);
 
-        self::assertSame('bar', $valueProvider->getValue(stringType(), 'foo'));
-        self::assertSame(42, $valueProvider->getValue(intType(), 'bar'));
-        self::assertNull($valueProvider->getValue(stringType(), 'baz'));
+        self::assertSame('bar', $valueProvider->getValue(types()->string(), 'foo'));
+        self::assertSame(42, $valueProvider->getValue(types()->int(), 'bar'));
+        self::assertNull($valueProvider->getValue(types()->string(), 'baz'));
     }
 
     public function testInvalidTypeReturnedFromIncludedFileThrowsException() : void {

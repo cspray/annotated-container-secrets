@@ -6,9 +6,7 @@ use Cspray\AnnotatedContainer\Secrets\Exception\InvalidJsonSourceFile;
 use Cspray\AnnotatedContainer\Secrets\JsonFileValueProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Util\Json;
-use function Cspray\Typiphy\arrayType;
-use function Cspray\Typiphy\stringType;
+use function Cspray\AnnotatedContainer\Reflection\types;
 
 #[
     CoversClass(JsonFileValueProvider::class),
@@ -52,13 +50,13 @@ final class JsonFileValueProviderTest extends TestCase {
     public function testSingleLevelJsonObjectReturnsCorrectValue() : void {
         $source = new JsonFileValueProvider($this->dir . '/single-level.json');
 
-        self::assertSame('bar', $source->getValue(stringType(), 'foo'));
+        self::assertSame('bar', $source->getValue(types()->string(), 'foo'));
     }
 
     public function testEmptyObjectReturnsNull() : void {
         $source = new JsonFileValueProvider($this->dir . '/empty-object.json');
 
-        self::assertNull($source->getValue(stringType(), 'foo'));
+        self::assertNull($source->getValue(types()->string(), 'foo'));
     }
 
     public function testNestedObjectReturnsCorrectValue() : void {
@@ -66,7 +64,7 @@ final class JsonFileValueProviderTest extends TestCase {
 
         self::assertSame(
             ['qux', 'quy', 'quz'],
-            $source->getValue(arrayType(), 'foo.bar.baz')
+            $source->getValue(types()->string(), 'foo.bar.baz')
         );
     }
 

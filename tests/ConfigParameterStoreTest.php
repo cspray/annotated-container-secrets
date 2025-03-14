@@ -8,7 +8,7 @@ use Cspray\AnnotatedContainer\Secrets\Source;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use function Cspray\Typiphy\stringType;
+use function Cspray\AnnotatedContainer\Reflection\types;
 
 #[
     CoversClass(ConfigParameterStore::class),
@@ -19,7 +19,7 @@ final class ConfigParameterStoreTest extends TestCase {
     public function testGetNameReturnsValuePassedToConstructor() : void {
         $subject = new ConfigParameterStore('secrets');
 
-        self::assertSame('secrets', $subject->getName());
+        self::assertSame('secrets', $subject->name());
     }
 
     public static function storeDelimiterProvider() : array {
@@ -39,7 +39,7 @@ final class ConfigParameterStoreTest extends TestCase {
             'The key "foo" passed to ' . ConfigParameterStore::class . ' MUST contain at least one "' . $storeDelimiter . '" delimiter.'
         );
 
-        $subject->fetch(stringType(), 'foo');
+        $subject->fetch(types()->string(), 'foo');
     }
 
     #[DataProvider('storeDelimiterProvider')]
@@ -51,7 +51,7 @@ final class ConfigParameterStoreTest extends TestCase {
             'The key "foo%sbar" specifies a secrets source "foo" that has not been added to ' . ConfigParameterStore::class, $storeDelimiter
         ));
 
-        $subject->fetch(stringType(), sprintf('foo%sbar', $storeDelimiter));
+        $subject->fetch(types()->string(), sprintf('foo%sbar', $storeDelimiter));
     }
 
     #[DataProvider('storeDelimiterProvider')]
@@ -60,17 +60,17 @@ final class ConfigParameterStoreTest extends TestCase {
 
         $source = $this->getMockBuilder(Source::class)->getMock();
         $source->expects($this->once())
-            ->method('getName')
+            ->method('name')
             ->willReturn('foo');
 
         $subject->addSource($source);
 
         $source->expects($this->once())
             ->method('getValue')
-            ->with(stringType(), 'bar')
+            ->with(types()->string(), 'bar')
             ->willReturn('bar value');
 
-        self::assertSame('bar value', $subject->fetch(stringType(), sprintf('foo%sbar', $storeDelimiter)));
+        self::assertSame('bar value', $subject->fetch(types()->string(), sprintf('foo%sbar', $storeDelimiter)));
     }
 
 }

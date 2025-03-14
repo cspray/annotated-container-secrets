@@ -2,21 +2,18 @@
 
 namespace Cspray\AnnotatedContainer\Secrets;
 
-use Cspray\Typiphy\Type;
-use Cspray\Typiphy\TypeIntersect;
-use Cspray\Typiphy\TypeUnion;
+use Cspray\AnnotatedContainer\Reflection\Type;
+use Cspray\AnnotatedContainer\Reflection\TypeUnion;
+use Cspray\AnnotatedContainer\Reflection\TypeIntersect;
 use Closure;
 
 final class ClosureValueProvider implements ValueProvider {
 
-    /**
-     * @param Closure(Type|TypeUnion|TypeIntersect,string):mixed $closure
-     */
     public function __construct(
-        private readonly \Closure $closure
+        private readonly Closure $closure
     ) {}
 
-    public function getValue(TypeUnion|Type|TypeIntersect $type, string $key) : mixed {
+    public function getValue(Type|TypeUnion|TypeIntersect $type, string $key) : mixed {
         return ($this->closure)($type, $key);
     }
 }

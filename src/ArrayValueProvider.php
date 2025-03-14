@@ -3,9 +3,9 @@
 namespace Cspray\AnnotatedContainer\Secrets;
 
 use Adbar\Dot;
-use Cspray\Typiphy\Type;
-use Cspray\Typiphy\TypeIntersect;
-use Cspray\Typiphy\TypeUnion;
+use Cspray\AnnotatedContainer\Reflection\Type;
+use Cspray\AnnotatedContainer\Reflection\TypeUnion;
+use Cspray\AnnotatedContainer\Reflection\TypeIntersect;
 use function dot;
 
 final class ArrayValueProvider implements ValueProvider {
@@ -24,7 +24,7 @@ final class ArrayValueProvider implements ValueProvider {
     /**
      * @param non-empty-string $key
      */
-    public function getValue(TypeUnion|Type|TypeIntersect $type, string $key) : mixed {
+    public function getValue(Type|TypeUnion|TypeIntersect $type, string $key) : mixed {
         return $this->data->get($key);
     }
 }

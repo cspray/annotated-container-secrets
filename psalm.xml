@@ -8,6 +8,7 @@
     findUnusedBaselineEntry="true"
     findUnusedCode="false"
     errorBaseline="known-issues.xml"
+    ensureOverrideAttribute="false"
 >
     <projectFiles>
         <directory name="src"/>

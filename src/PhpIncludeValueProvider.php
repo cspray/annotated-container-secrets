@@ -3,10 +3,10 @@
 namespace Cspray\AnnotatedContainer\Secrets;
 
 use Closure;
+use Cspray\AnnotatedContainer\Reflection\Type;
+use Cspray\AnnotatedContainer\Reflection\TypeIntersect;
+use Cspray\AnnotatedContainer\Reflection\TypeUnion;
 use Cspray\AnnotatedContainer\Secrets\Exception\InvalidPhpSourceFile;
-use Cspray\Typiphy\Type;
-use Cspray\Typiphy\TypeIntersect;
-use Cspray\Typiphy\TypeUnion;
 
 final class PhpIncludeValueProvider implements ValueProvider {
 
@@ -18,7 +18,7 @@ final class PhpIncludeValueProvider implements ValueProvider {
         $this->valueProvider = $this->valueProviderForIncludedFile($filePath);
     }
 
-    public function getValue(TypeUnion|Type|TypeIntersect $type, string $key) : mixed {
+    public function getValue(Type|TypeUnion|TypeIntersect $type, string $key) : mixed {
         return $this->valueProvider->getValue($type, $key);
     }
 

@@ -3,22 +3,22 @@
 namespace Cspray\AnnotatedContainer\Secrets\Test;
 
 use Cspray\AnnotatedContainer\Secrets\ClosureValueProvider;
-use Cspray\Typiphy\Type;
-use Cspray\Typiphy\TypeIntersect;
-use Cspray\Typiphy\TypeUnion;
+use Cspray\AnnotatedContainer\Reflection\Type;
+use Cspray\AnnotatedContainer\Reflection\TypeUnion;
+use Cspray\AnnotatedContainer\Reflection\TypeIntersect;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use function Cspray\Typiphy\stringType;
+use function Cspray\AnnotatedContainer\Reflection\types;
 
 #[CoversClass(ClosureValueProvider::class)]
 final class ClosureValueProviderTest extends TestCase {
 
     public function testSubjectGetValueDelegatesToClosure() : void {
-        $subject = new ClosureValueProvider(fn(Type|TypeIntersect|TypeUnion $type, string $key) : mixed => $type->getName() . '|' . $key);
+        $subject = new ClosureValueProvider(fn(Type|TypeIntersect|TypeUnion $type, string $key) : mixed => $type->name() . '|' . $key);
 
         self::assertSame(
             'string|foo',
-            $subject->getValue(stringType(), 'foo')
+            $subject->getValue(types()->string(), 'foo')
         );
     }
 
