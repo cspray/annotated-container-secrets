@@ -9,7 +9,6 @@
   <file src="src/PhpIncludeValueProvider.php">
     <MixedArgumentTypeCoercion>
       <code>$data</code>
-      <code>$data</code>
     </MixedArgumentTypeCoercion>
     <MixedAssignment>
       <code>$data</code>

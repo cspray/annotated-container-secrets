@@ -2,9 +2,9 @@
 
 namespace Cspray\AnnotatedContainer\Secrets;
 
-use Cspray\Typiphy\Type;
-use Cspray\Typiphy\TypeIntersect;
-use Cspray\Typiphy\TypeUnion;
+use Cspray\AnnotatedContainer\Reflection\Type;
+use Cspray\AnnotatedContainer\Reflection\TypeUnion;
+use Cspray\AnnotatedContainer\Reflection\TypeIntersect;
 
 final class SingleValueProviderSource implements Source {
 
@@ -17,11 +17,11 @@ final class SingleValueProviderSource implements Source {
         private readonly ValueProvider $valueProvider
     ) {}
 
-    public function getName() : string {
+    public function name() : string {
         return $this->name;
     }
 
-    public function getValue(TypeUnion|Type|TypeIntersect $type, string $key) : mixed {
+    public function getValue(Type|TypeUnion|TypeIntersect $type, string $key) : mixed {
         return $this->valueProvider->getValue($type, $key);
     }
 }

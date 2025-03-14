@@ -11,7 +11,7 @@ use Cspray\AnnotatedContainer\Secrets\SingleValueProviderSource;
 use Cspray\AnnotatedContainer\Secrets\Source;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use function Cspray\Typiphy\stringType;
+use function Cspray\AnnotatedContainer\Reflection\types;
 
 #[
     CoversClass(ConfigParameterStoreFactory::class),
@@ -59,7 +59,7 @@ final class ConfigParameterStoreFactoryTest extends TestCase {
             ConfigParameterStore::class,
             $store
         );
-        self::assertSame('bar', $store->fetch(stringType(), 'source.foo'));
+        self::assertSame('bar', $store->fetch(types()->string(), 'source.foo'));
     }
 
     public function testConfigParameterStoreNameIsIdentifierPassedIn() : void {
@@ -72,7 +72,7 @@ final class ConfigParameterStoreFactoryTest extends TestCase {
         );
         $store = $subject->createParameterStore('secrets');
 
-        self::assertSame('secrets', $store->getName());
+        self::assertSame('secrets', $store->name());
     }
 
 }

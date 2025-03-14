@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-use Cspray\Typiphy\Type;
-use Cspray\Typiphy\TypeIntersect;
-use Cspray\Typiphy\TypeUnion;
+use Cspray\AnnotatedContainer\Reflection\Type;
+use Cspray\AnnotatedContainer\Reflection\TypeUnion;
+use Cspray\AnnotatedContainer\Reflection\TypeIntersect;
 
 return function(Type|TypeUnion|TypeIntersect $type, string $key) : mixed {
     return match ($key) {

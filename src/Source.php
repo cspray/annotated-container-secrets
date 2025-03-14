@@ -7,6 +7,6 @@ interface Source extends ValueProvider {
     /**
      * @return non-empty-string
      */
-    public function getName() : string;
+    public function name() : string;
 
 }

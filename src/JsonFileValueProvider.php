@@ -4,9 +4,9 @@ namespace Cspray\AnnotatedContainer\Secrets;
 
 use Adbar\Dot;
 use Cspray\AnnotatedContainer\Secrets\Exception\InvalidJsonSourceFile;
-use Cspray\Typiphy\Type;
-use Cspray\Typiphy\TypeIntersect;
-use Cspray\Typiphy\TypeUnion;
+use Cspray\AnnotatedContainer\Reflection\Type;
+use Cspray\AnnotatedContainer\Reflection\TypeUnion;
+use Cspray\AnnotatedContainer\Reflection\TypeIntersect;
 use JsonException;
 use function dot;
 
@@ -31,6 +31,7 @@ final class JsonFileValueProvider implements ValueProvider {
 
         try {
             $contents = file_get_contents($filePath);
+            assert($contents !== false);
             /**
              * @var mixed $json
              */
@@ -48,7 +49,7 @@ final class JsonFileValueProvider implements ValueProvider {
         }
     }
 
-    public function getValue(TypeUnion|Type|TypeIntersect $type, string $key) : mixed {
+    public function getValue(Type|TypeUnion|TypeIntersect $type, string $key) : mixed {
         return $this->data->get($key);
     }
 

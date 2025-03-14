@@ -2,9 +2,9 @@
 
 namespace Cspray\AnnotatedContainer\Secrets;
 
-use Cspray\Typiphy\Type;
-use Cspray\Typiphy\TypeIntersect;
-use Cspray\Typiphy\TypeUnion;
+use Cspray\AnnotatedContainer\Reflection\Type;
+use Cspray\AnnotatedContainer\Reflection\TypeUnion;
+use Cspray\AnnotatedContainer\Reflection\TypeIntersect;
 
 final class ProfileAwareSource implements Source {
 
@@ -19,11 +19,11 @@ final class ProfileAwareSource implements Source {
         private readonly array $profileValueProviderMap
     ) {}
 
-    public function getName() : string {
+    public function name() : string {
         return $this->name;
     }
 
-    public function getValue(TypeUnion|Type|TypeIntersect $type, string $key) : mixed {
+    public function getValue(Type|TypeUnion|TypeIntersect $type, string $key) : mixed {
         foreach ($this->profileValueProviderMap as $profile => $valueProvider) {
             if (in_array($profile, $this->activeProfiles, true)) {
                 return $valueProvider->getValue($type, $key);
