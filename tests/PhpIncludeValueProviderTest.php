@@ -41,14 +41,23 @@ final class PhpIncludeValueProviderTest extends TestCase {
         $this->expectException(InvalidPhpSourceFile::class);
         $this->expectExceptionMessage("The provided file \"$file\" did not return a valid type.");
 
-        new PhpIncludeValueProvider($file);
+        (new PhpIncludeValueProvider($file))->getValue(types()->string(), 'some-key');
     }
 
     public function testStringIsNotFilePathThrowsException() : void {
         $this->expectException(InvalidPhpSourceFile::class);
         $this->expectExceptionMessage("The provided path \"not a file path\" is not a valid file");
 
-        new PhpIncludeValueProvider('not a file path');
+        (new PhpIncludeValueProvider('not a file path'))->getValue(types()->bool(), 'some-other-key');
+    }
+
+    public function testValuesAreLazyLoadedResultingInFileNotBeingIncludedUntilGettingValue() : void {
+        $provider = new PhpIncludeValueProvider(__DIR__ . '/Fixture/exception-throwing.php');
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Thrown from the included file');
+
+        $provider->getValue(types()->array(), 'any-key');
     }
 
 }

@@ -10,23 +10,26 @@ use Cspray\AnnotatedContainer\Secrets\Exception\InvalidPhpSourceFile;
 
 final class PhpIncludeValueProvider implements ValueProvider {
 
-    private readonly ValueProvider $valueProvider;
+    private readonly string $filePath;
+
+    private ?ValueProvider $valueProvider;
 
     public function __construct(
         string $filePath
     ) {
-        $this->valueProvider = $this->valueProviderForIncludedFile($filePath);
+        $this->filePath = $filePath;
     }
 
     public function getValue(Type|TypeUnion|TypeIntersect $type, string $key) : mixed {
+        $this->valueProvider ??= $this->valueProviderForIncludedFile();
         return $this->valueProvider->getValue($type, $key);
     }
 
-    private function valueProviderForIncludedFile(string $filePath) : ValueProvider {
-        if (!is_file($filePath)) {
-            throw InvalidPhpSourceFile::fromPathNotFile($filePath);
+    private function valueProviderForIncludedFile() : ValueProvider {
+        if (!is_file($this->filePath)) {
+            throw InvalidPhpSourceFile::fromPathNotFile($this->filePath);
         }
-        $data = include $filePath;
+        $data = include $this->filePath;
         if (is_array($data)) {
             return new ArrayValueProvider($data);
         } else if ($data instanceof Closure) {
@@ -34,7 +37,7 @@ final class PhpIncludeValueProvider implements ValueProvider {
         } else if ($data instanceof ValueProvider) {
             return $data;
         } else {
-            throw InvalidPhpSourceFile::fromPhpFileReturnedInvalidType($filePath);
+            throw InvalidPhpSourceFile::fromPhpFileReturnedInvalidType($this->filePath);
         }
     }
 }
